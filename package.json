@@ -10,6 +10,10 @@
   ],
   "main": "dist/Modal.js",
   "module": "dist/Modal.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code9g/modal.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "babel src/lib -d dist",
