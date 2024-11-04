@@ -13,6 +13,9 @@ const OPEN_ATTRIBUTE = "open";
 const OPEN_EVENT = "open";
 const CLOSE_EVENT = "close";
 
+const FOCUS_SELECTOR =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 const openCustomEvent = new CustomEvent(OPEN_EVENT);
 const closeCustomEvent = new CustomEvent(CLOSE_EVENT);
 
@@ -46,11 +49,8 @@ const attributes = {
   },
 };
 
-const focusSelector =
-  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
 const handleAutoFocus = (e) => {
-  const element = e.target.querySelector(focusSelector);
+  const element = e.target.querySelector(FOCUS_SELECTOR);
   if (element) {
     setTimeout(() => {
       element.focus();
@@ -134,7 +134,7 @@ const Modal = forwardRef(
       if (focusTrap) {
         const keyEvent = (e) => {
           if (innerRef.current.open && e.key === "Tab") {
-            const elements = innerRef.current.querySelectorAll(focusSelector);
+            const elements = innerRef.current.querySelectorAll(FOCUS_SELECTOR);
 
             const [first, last] = e.shiftKey
               ? [elements.length - 1, 0]
