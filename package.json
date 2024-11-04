@@ -1,0 +1,42 @@
+{
+  "name": "code9g-modal",
+  "version": "0.0.11",
+  "author": "Pierre-André Henry",
+  "description": "React component modal",
+  "keywords": [
+    "component",
+    "react",
+    "modal"
+  ],
+  "main": "dist/Modal.js",
+  "module": "dist/Modal.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "babel src/lib -d dist",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.25.9",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "@eslint/js": "^9.13.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.11.0",
+    "vite": "^5.4.10",
+    "clsx": "^2.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "peerDependencies": {
+    "clsx": "^2.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
