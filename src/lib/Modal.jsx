@@ -7,57 +7,33 @@ import React, {
   useRef,
 } from "react";
 import { createPortal } from "react-dom";
+import { CLOSE_EVENT, OPEN_EVENT } from "./consts";
+import { defineModal, focusSelectors, handleAutoFocus } from "./functions";
 
-const OPEN_ATTRIBUTE = "open";
-
-const OPEN_EVENT = "open";
-const CLOSE_EVENT = "close";
-
-const FOCUS_SELECTOR =
-  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
-const openCustomEvent = new CustomEvent(OPEN_EVENT);
-const closeCustomEvent = new CustomEvent(CLOSE_EVENT);
-
-const observer = new MutationObserver((records) => {
-  for (const { target } of records) {
-    if (target.hasAttribute(OPEN_ATTRIBUTE)) {
-      target.dispatchEvent(openCustomEvent);
-    } else {
-      target.dispatchEvent(closeCustomEvent);
-    }
-  }
-});
-
-const options = {
-  attributeFilter: [OPEN_ATTRIBUTE],
-  attributes: true,
-};
-
-const attributes = {
-  enumerable: true,
-  configurable: true,
-  get: function () {
-    return this.hasAttribute(OPEN_ATTRIBUTE);
-  },
-  set: function (value) {
-    if (value === true) {
-      this.setAttribute(OPEN_ATTRIBUTE, "");
-    } else {
-      this.removeAttribute(OPEN_ATTRIBUTE);
-    }
-  },
-};
-
-const handleAutoFocus = (e) => {
-  const element = e.target.querySelector(FOCUS_SELECTOR);
-  if (element) {
-    setTimeout(() => {
-      element.focus();
-    }, 100);
-  }
-};
-
+/**
+ * Composant qui permet l'affichage d'une fenêtre modale
+ *
+ * @component
+ *
+ * @param {Object} props Les propriétés passées au composant
+ * @param {boolean} props.isOpen Indique si la modale est ouverte ou fermée
+ * @param {function} props.onOpen Fonction de rappel lorsque la modale est ouverte
+ * @param {function} props.onClose Fonction de rappel lorsque la modale est fermée
+ * @param {function} props.onMouseOut  Fonction de rappel lorsque l'utilisateur clique en-dehors de la "modale"
+ * @param {function} props.onEscape fonction de rappel lorsque l'utilisateur appuie sur la touche d'échappement
+ * @param {string|any} props.openClass Classe à utiliser avec className lorsque la modale est ouverte
+ * @param {string|any} props.closeClass Classe à utiliser avec className lorsque la modale est fermée
+ * @param {boolean} props.autoFocus Permet de gérer l'autofocus lorsque la modale s'ouvre
+ * @param {boolean} props.focusTrap Permet de gérer la tabulation afin qu'elle demeure au sein de la modale
+ * @param {string|anly} props.className Permet de personnaliser une partie du className de la modale
+ * @param {object} props.style Permet de personnaliser une partie du style de la modale
+ * @param {React.ReactNode} props.children - Contenu à afficher dans la modale
+ *
+ * @returns {React.ReactElement} Un élément React représentant la modale
+ *
+ * @function
+ * @name Modal
+ */
 const Modal = forwardRef(
   (
     {
@@ -83,10 +59,7 @@ const Modal = forwardRef(
     useEffect(() => {
       const modal = innerRef?.current;
       if (modal) {
-        observer.observe(modal, options);
-        Object.defineProperty(modal, OPEN_ATTRIBUTE, attributes);
-        modal.show = () => (modal.open = true);
-        modal.close = () => (modal.open = false);
+        defineModal(modal);
       }
     }, []);
 
@@ -134,7 +107,7 @@ const Modal = forwardRef(
       if (focusTrap) {
         const keyEvent = (e) => {
           if (innerRef.current.open && e.key === "Tab") {
-            const elements = innerRef.current.querySelectorAll(FOCUS_SELECTOR);
+            const elements = focusSelectors(innerRef.current);
 
             const [first, last] = e.shiftKey
               ? [elements.length - 1, 0]
