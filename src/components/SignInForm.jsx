@@ -40,7 +40,6 @@ const SignInForm = forwardRef(
         name={name}
         className={clsx("w-1/3 rounded-xl bg-white p-4 shadow", className)}
         onSubmit={handleSubmit}
-        noValidate
       >
         <h2 className="mb-4 text-3xl font-semibold">Sign Up</h2>
         <div className="mb-5">
